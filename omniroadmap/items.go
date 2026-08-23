@@ -4,15 +4,18 @@ import (
 	"context"
 	"slices"
 
+	productboard "github.com/grokify/productboard-go"
+
 	omniroadmap "github.com/grokify/omniroadmap-core"
 	"github.com/grokify/omniroadmap-core/provider"
 )
 
-// ListItems lists items across the kinds requested (or all supported kinds
-// if req.Kinds is empty). ProductBoard's Entities API is cursor-paginated,
-// not page-numbered — req.Page is ignored; the response's TotalCount is
-// left at 0 (ProductBoard's list endpoint doesn't return a total count,
-// only a next-page cursor) rather than fabricated.
+// ListItems lists all items across the kinds requested (or all supported
+// kinds if req.Kinds is empty). ProductBoard's Entities API is cursor-
+// paginated, not page-numbered — req.Page is ignored, and every page is
+// fetched internally so the response is always the complete result set.
+// TotalCount is left at 0 (ProductBoard's list endpoint doesn't return a
+// total count, only a next-page cursor) rather than fabricated.
 func (p *Provider) ListItems(ctx context.Context, req *provider.ListItemsRequest) (*provider.ListItemsResponse, error) {
 	kinds := req.Kinds
 	if len(kinds) == 0 {
@@ -33,26 +36,30 @@ func (p *Provider) ListItems(ctx context.Context, req *provider.ListItemsRequest
 func (p *Provider) listItemsByKind(ctx context.Context, kind provider.ItemKind) ([]provider.Item, error) {
 	switch kind {
 	case provider.ItemKindFeature:
-		list, err := p.client.ListFeatures(ctx)
-		if err != nil {
-			return nil, wrapErr("ListFeatures", err)
-		}
-		items := make([]provider.Item, len(list.Features))
-		for i := range list.Features {
-			items[i] = *itemFromFeature(&list.Features[i])
-		}
-		return items, nil
+		return paginate(func(cursor string) ([]provider.Item, string, error) {
+			list, err := p.client.ListFeatures(ctx, productboard.WithPageCursor(cursor))
+			if err != nil {
+				return nil, "", wrapErr("ListFeatures", err)
+			}
+			items := make([]provider.Item, len(list.Features))
+			for i := range list.Features {
+				items[i] = *itemFromFeature(&list.Features[i])
+			}
+			return items, list.NextCursor, nil
+		})
 
 	case provider.ItemKindObjective:
-		list, err := p.client.ListObjectives(ctx)
-		if err != nil {
-			return nil, wrapErr("ListObjectives", err)
-		}
-		items := make([]provider.Item, len(list.Objectives))
-		for i := range list.Objectives {
-			items[i] = *itemFromObjective(&list.Objectives[i])
-		}
-		return items, nil
+		return paginate(func(cursor string) ([]provider.Item, string, error) {
+			list, err := p.client.ListObjectives(ctx, productboard.WithPageCursor(cursor))
+			if err != nil {
+				return nil, "", wrapErr("ListObjectives", err)
+			}
+			items := make([]provider.Item, len(list.Objectives))
+			for i := range list.Objectives {
+				items[i] = *itemFromObjective(&list.Objectives[i])
+			}
+			return items, list.NextCursor, nil
+		})
 
 	default:
 		if !slices.Contains(p.Capabilities().Kinds, kind) {

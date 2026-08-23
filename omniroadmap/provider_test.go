@@ -72,3 +72,36 @@ func TestListCustomFieldDefinitions_Unsupported(t *testing.T) {
 		t.Fatal("expected ErrUnsupportedOperation, got nil")
 	}
 }
+
+func TestListItems_FollowsAllPages(t *testing.T) {
+	pages := map[string]string{
+		"": `{
+			"data": [{"id": "195a1cb2-728f-4be8-900f-aebbd84d7944", "type": "feature", "fields": {"name": "Page One Feature"}}],
+			"links": {"next": "cursor-2"}
+		}`,
+		"cursor-2": `{
+			"data": [{"id": "295a1cb2-728f-4be8-900f-aebbd84d7945", "type": "feature", "fields": {"name": "Page Two Feature"}}],
+			"links": {"next": null}
+		}`,
+	}
+	var requestedCursors []string
+	p := newTestProvider(t, func(w http.ResponseWriter, r *http.Request) {
+		cursor := r.URL.Query().Get("pageCursor")
+		requestedCursors = append(requestedCursors, cursor)
+		w.Header().Set("Content-Type", "application/json")
+		_, _ = w.Write([]byte(pages[cursor]))
+	})
+
+	resp, err := p.ListItems(t.Context(), &provider.ListItemsRequest{
+		Kinds: []provider.ItemKind{provider.ItemKindFeature},
+	})
+	if err != nil {
+		t.Fatalf("ListItems: %v", err)
+	}
+	if len(resp.Items) != 2 {
+		t.Fatalf("len(Items) = %d, want 2 (should follow the next-page cursor)", len(resp.Items))
+	}
+	if len(requestedCursors) != 2 || requestedCursors[1] != "cursor-2" {
+		t.Errorf("requested cursors = %v, want [\"\", \"cursor-2\"]", requestedCursors)
+	}
+}
