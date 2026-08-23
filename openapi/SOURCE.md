@@ -1,8 +1,7 @@
 # Vendored spec provenance
 
 `entities.json` is a **vendored, pinned copy** of ProductBoard's own official
-OpenAPI spec — not hand-authored (unlike `aha-go`'s `openapi/aha.yaml`, since
-Aha publishes no spec of its own; ProductBoard does).
+OpenAPI spec — not hand-authored.
 
 - **Source URL**: https://developer.productboard.com/openapi/entities.yaml
   (despite the `.yaml` URL, the actual response body is JSON — saved here as

@@ -28,11 +28,9 @@ A thin, read-only Go SDK for the [ProductBoard REST API v2](https://developer.pr
 
 ## Scope (v0.1)
 
-Unlike [aha-go](https://github.com/grokify/aha-go) (which hand-authors its
-OpenAPI spec because Aha publishes none), ProductBoard **does** publish an
-official OpenAPI 3.1.1 spec — vendored here at `openapi/entities.json` (see
-`openapi/SOURCE.md` for provenance) and used to generate `internal/api` via
-[ogen](https://github.com/ogen-go/ogen).
+ProductBoard publishes an official OpenAPI 3.1.1 spec — vendored here at
+`openapi/entities.json` (see `openapi/SOURCE.md` for provenance) and used
+to generate `internal/api` via [ogen](https://github.com/ogen-go/ogen).
 
 This SDK covers just enough of ProductBoard's generic Entities API to read
 Features, Releases, and Objectives:

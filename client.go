@@ -1,8 +1,8 @@
 // Package productboard is a Go SDK for the ProductBoard REST API v2
-// (https://developer.productboard.com/reference/introduction). Unlike
-// aha-go, ProductBoard publishes a real official OpenAPI spec, vendored at
-// openapi/entities.json (see openapi/SOURCE.md for provenance) and used to
-// generate internal/api via ogen — see generate.sh / make generate.
+// (https://developer.productboard.com/reference/introduction). ProductBoard
+// publishes an official OpenAPI spec, vendored at openapi/entities.json
+// (see openapi/SOURCE.md for provenance) and used to generate internal/api
+// via ogen — see generate.sh / make generate.
 //
 // Scope is deliberately thin for v0.1: read-only access to Features,
 // Releases, and Objectives via ProductBoard's generic Entities API, just
