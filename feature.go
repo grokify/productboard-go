@@ -70,9 +70,15 @@ func (c *Client) ListFeatures(ctx context.Context, opts ...ListOption) (*Feature
 
 func featureFromEntity(e api.Entity) *Feature {
 	f := &Feature{
-		ID:   uuidString(e.ID),
-		Type: string(e.Type),
+		ID:        uuidString(e.ID),
+		Type:      string(e.Type),
+		CreatedAt: entityTimestamp(e.CreatedAt),
+		UpdatedAt: entityTimestamp(e.UpdatedAt),
 	}
+	if rel, ok := e.Relationships.Get(); ok {
+		f.ParentID = parentIDFromRelationships(rel)
+	}
+
 	fields, ok := e.Fields.Get()
 	if !ok {
 		return f
@@ -84,11 +90,5 @@ func featureFromEntity(e api.Entity) *Feature {
 	f.Tags = fieldSelectOptions(fields, "tags")
 	f.Timeframe = fieldTimeframe(fields, "timeframe")
 	f.Archived = fieldBool(fields, "archived")
-	f.CreatedAt = fieldDateTime(fields, "createdAt")
-	f.UpdatedAt = fieldDateTime(fields, "updatedAt")
-
-	if rel, ok := e.Relationships.Get(); ok {
-		f.ParentID = parentIDFromRelationships(rel)
-	}
 	return f
 }

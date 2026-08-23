@@ -64,7 +64,11 @@ func (c *Client) ListReleases(ctx context.Context, opts ...ListOption) (*Release
 }
 
 func releaseFromEntity(e api.Entity) *Release {
-	r := &Release{ID: uuidString(e.ID)}
+	r := &Release{
+		ID:        uuidString(e.ID),
+		CreatedAt: entityTimestamp(e.CreatedAt),
+		UpdatedAt: entityTimestamp(e.UpdatedAt),
+	}
 	fields, ok := e.Fields.Get()
 	if !ok {
 		return r
@@ -73,7 +77,5 @@ func releaseFromEntity(e api.Entity) *Release {
 	r.Status = fieldStatus(fields)
 	r.Timeframe = fieldTimeframe(fields, "timeframe")
 	r.Archived = fieldBool(fields, "archived")
-	r.CreatedAt = fieldDateTime(fields, "createdAt")
-	r.UpdatedAt = fieldDateTime(fields, "updatedAt")
 	return r
 }

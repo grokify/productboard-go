@@ -16,9 +16,7 @@ const getFeatureFixture = `{
 			"owner": {"id": "ow-1", "email": "john@doe.com"},
 			"tags": [{"id": "tag-1", "name": "api", "color": "blue"}],
 			"timeframe": {"startDate": "2023-10-01", "endDate": "2023-10-31", "granularity": "month"},
-			"archived": false,
-			"createdAt": "2023-01-01T00:00:00Z",
-			"updatedAt": "2023-01-02T00:00:00Z"
+			"archived": false
 		},
 		"relationships": {
 			"data": [
@@ -27,7 +25,9 @@ const getFeatureFixture = `{
 					"target": {"id": "318de52f-4e38-4c94-a550-a0d47a1f212e", "type": "component"}
 				}
 			]
-		}
+		},
+		"createdAt": "2023-01-01T00:00:00Z",
+		"updatedAt": "2023-01-02T00:00:00Z"
 	}
 }`
 
@@ -63,8 +63,11 @@ func TestGetFeature(t *testing.T) {
 	if f.ParentID != "318de52f-4e38-4c94-a550-a0d47a1f212e" {
 		t.Errorf("ParentID = %q, want %q", f.ParentID, "318de52f-4e38-4c94-a550-a0d47a1f212e")
 	}
-	if f.CreatedAt == nil {
-		t.Error("CreatedAt = nil, want non-nil")
+	if f.CreatedAt == nil || f.CreatedAt.Format("2006-01-02") != "2023-01-01" {
+		t.Errorf("CreatedAt = %v, want 2023-01-01", f.CreatedAt)
+	}
+	if f.UpdatedAt == nil || f.UpdatedAt.Format("2006-01-02") != "2023-01-02" {
+		t.Errorf("UpdatedAt = %v, want 2023-01-02", f.UpdatedAt)
 	}
 }
 

@@ -66,7 +66,11 @@ func (c *Client) ListObjectives(ctx context.Context, opts ...ListOption) (*Objec
 }
 
 func objectiveFromEntity(e api.Entity) *Objective {
-	o := &Objective{ID: uuidString(e.ID)}
+	o := &Objective{
+		ID:        uuidString(e.ID),
+		CreatedAt: entityTimestamp(e.CreatedAt),
+		UpdatedAt: entityTimestamp(e.UpdatedAt),
+	}
 	fields, ok := e.Fields.Get()
 	if !ok {
 		return o
@@ -77,7 +81,5 @@ func objectiveFromEntity(e api.Entity) *Objective {
 	o.Owner = fieldMember(fields, "owner")
 	o.Timeframe = fieldTimeframe(fields, "timeframe")
 	o.Archived = fieldBool(fields, "archived")
-	o.CreatedAt = fieldDateTime(fields, "createdAt")
-	o.UpdatedAt = fieldDateTime(fields, "updatedAt")
 	return o
 }

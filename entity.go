@@ -80,16 +80,16 @@ func fieldBool(fields api.EntityFields, key string) bool {
 	return b
 }
 
-func fieldDateTime(fields api.EntityFields, key string) *time.Time {
-	v, ok := fields[key]
+// entityTimestamp converts an Entity's top-level createdAt/updatedAt
+// (api.OptDateTimeFieldValue) to a *time.Time. Unlike other field values,
+// these live outside the dynamic fields map — see api.Entity.
+func entityTimestamp(v api.OptDateTimeFieldValue) *time.Time {
+	t, ok := v.Get()
 	if !ok {
 		return nil
 	}
-	var t time.Time
-	if err := json.Unmarshal(v, &t); err != nil {
-		return nil
-	}
-	return &t
+	tt := time.Time(t)
+	return &tt
 }
 
 func fieldStatus(fields api.EntityFields) *Status {
