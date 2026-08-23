@@ -14,8 +14,9 @@ type Config struct {
 	// APIToken is your ProductBoard API token (Personal Access Token).
 	APIToken string
 
-	// HTTPClient is the HTTP client to use for requests.
-	// If nil, http.DefaultClient is used.
+	// HTTPClient is the HTTP client to use for requests. If nil, a new
+	// *http.Client with Timeout applied is constructed. If set, it's used
+	// as-is — Timeout is not applied to a caller-supplied client.
 	HTTPClient *http.Client
 
 	// Timeout is the request timeout. Default is 60 seconds.
@@ -26,9 +27,6 @@ type Config struct {
 }
 
 func (c *Config) loadDefaults() {
-	if c.HTTPClient == nil {
-		c.HTTPClient = http.DefaultClient
-	}
 	if c.Timeout == 0 {
 		c.Timeout = 60 * time.Second
 	}

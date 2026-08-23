@@ -53,6 +53,9 @@ func NewClient(opts ...Option) (*Client, error) {
 	}
 
 	secSource := &securitySource{token: cfg.APIToken}
+	if cfg.HTTPClient == nil {
+		cfg.HTTPClient = &http.Client{Timeout: cfg.Timeout}
+	}
 	httpClient := &sdkHTTPClient{client: cfg.HTTPClient}
 
 	apiClient, err := api.NewClient(cfg.buildBaseURL(), secSource, api.WithClient(httpClient))
