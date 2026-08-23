@@ -1,0 +1,5 @@
+generator:
+  ignore_not_implemented:
+    - "unsupported content types"
+    - "complex anyOf"
+    - "discriminator inference"
