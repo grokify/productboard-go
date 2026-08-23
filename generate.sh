@@ -16,7 +16,7 @@
 #   ./generate.sh
 #
 # Prerequisites:
-#   - Go 1.24+
+#   - Go 1.26+
 #   - ogen (will be installed if missing)
 #
 set -euo pipefail
