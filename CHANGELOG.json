@@ -1,0 +1,39 @@
+{
+  "irVersion": "1.0",
+  "project": "productboard-go",
+  "repository": "https://github.com/grokify/productboard-go",
+  "versioning": "semver",
+  "commitConvention": "conventional",
+  "maintainers": ["grokify", "johncwang@gmail.com"],
+  "releases": [
+    {
+      "version": "v0.1.0",
+      "date": "2026-08-23",
+      "commit": "91da156",
+      "highlights": [
+        { "description": "Initial release: a thin, read-only Go SDK for the ProductBoard REST API v2, covering Features, Releases, and Objectives via ProductBoard's generic Entities API", "commit": "a198d30" },
+        { "description": "omniroadmap-core Provider adapter for wiring ProductBoard into omniroadmap-based tooling", "commit": "0227ed0" }
+      ],
+      "added": [
+        { "description": "Vendored ProductBoard OpenAPI 3.1.1 Entities spec and ogen-generated low-level API client (`internal/api`)", "commit": "39a60c0" },
+        { "description": "`Client` with option-based configuration (`WithAPIToken`, `WithHTTPClient`, `WithTimeout`, `WithBaseURL`)", "commit": "8b05500" },
+        { "description": "`APIError` type with `IsNotFound`, `IsUnauthorized`, `IsRateLimited` helpers for classifying API failures", "commit": "8b05500" },
+        { "description": "`Feature`/`Release`/`Objective` types and `Get*`/`List*` methods built on ProductBoard's generic Entities API", "commit": "a198d30" },
+        { "description": "Field-value parsing helpers that type each dynamic entity field-value shape (status, member, select options, timeframe) by inspecting it at runtime", "commit": "a198d30" },
+        { "description": "`omniroadmap.Provider` implementing omniroadmap-core's `provider.Provider` interface, supporting `ListItems`/`GetItem` for features and objectives, and `ListReleases`", "commit": "0227ed0" }
+      ],
+      "tests": [
+        { "description": "Unit tests covering client construction, field-value parsing, `Get*`/`List*` for features/releases/objectives, and the omniroadmap provider's conversions and unsupported-operation paths, including omniroadmap-core's provider conformance suite", "commit": "b7a98fd" }
+      ],
+      "documentation": [
+        { "description": "README covering scope, ProductBoard's dynamic field model, and quick start usage", "commit": "91da156" }
+      ],
+      "infrastructure": [
+        { "description": "GitHub Actions workflows for Go build/test, golangci-lint, and CodeQL static analysis", "commit": "d10b4f9" }
+      ],
+      "internal": [
+        { "description": "Go module definition, dependency lockfile, Makefile targets, ogen generation script/config, and golangci-lint config", "commit": "9f804c8" }
+      ]
+    }
+  ]
+}
