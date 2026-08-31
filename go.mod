@@ -8,9 +8,9 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/grokify/omniroadmap-core v0.1.0
 	github.com/ogen-go/ogen v1.24.0
-	go.opentelemetry.io/otel v1.45.0
-	go.opentelemetry.io/otel/metric v1.45.0
-	go.opentelemetry.io/otel/trace v1.45.0
+	go.opentelemetry.io/otel v1.46.0
+	go.opentelemetry.io/otel/metric v1.46.0
+	go.opentelemetry.io/otel/trace v1.46.0
 )
 
 require (
